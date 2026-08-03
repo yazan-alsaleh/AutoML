@@ -20,7 +20,7 @@ class DataLoader:
 
         # Get the inputs (x)
         
-        X = df.drop(columns = [self.target]) # Get all the columns except the trager 
+        X = df.drop(columns = [self.target]) # Get all the columns except the trager. Becauses pandas receive a list we add [ ]
 
         y = df[self.target] # Get the target / to be predicted column from the data frame
 
@@ -32,4 +32,25 @@ class DataLoader:
 
         return X, y, task
 
+    # Get the problem type
+    def detect_task(self, y):
 
+        if y.dtype == "object": # like the rows in the column is: dog, dog, cat, dog. These are objects / labels
+            return "classification"
+        if y.nunique() < 20: 
+            return "classification"
+        # nunique() counts how many different values exist in the target column.
+        # example: dog, dog, cat, dog --> it will return 2.
+
+        # Why checking if it is less than 20? Because mostly there could be 5, 10, at max 20 unique value
+        
+        else:
+            return "regression"
+
+
+# Testing the calss 
+
+
+# loader = DataLoader(path="loan.csv", target="loan_status")
+# X, y, task = loader.load()
+# print(task)
