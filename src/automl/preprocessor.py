@@ -24,7 +24,7 @@ class Preprocessor:
 
     def build(self, X):
 
-        numerical = X.selext_dtypes(include = ["int64", "float64"]).columns # returns columns with numeric types.
+        numerical = X.select_dtypes(include = ["int64", "float64"]).columns # returns columns with numeric types.
 
         categorical = X.select_dtypes(include = [object]).columns # returns columns with categorical types.
 

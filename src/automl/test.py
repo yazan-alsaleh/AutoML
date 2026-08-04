@@ -1,8 +1,9 @@
 from automl.data_loader import DataLoader
 from automl.preprocessor import Preprocessor
 
+loader = DataLoader(path=r"src\automl\Salary_dataset.csv", target="Salary")
 
-X, y, task = DataLoader(path="./Salary_dataset.csv", target="Salary")
+X, y, task = loader.load()
 
 processor = Preprocessor()
 
