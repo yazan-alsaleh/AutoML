@@ -3,3 +3,5 @@ pandas
 scikit-learn
 xgboost
 pytest
+jupyter
+ipykernel==6.29.5
