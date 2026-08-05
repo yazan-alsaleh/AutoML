@@ -22,7 +22,7 @@ df = pd.DataFrame({
     "target": [0, 1, 1]
 })
 
-validator = Validator(df, target="target")
+validator = Validator(df, target="worng")
 
 validator.validate()
 

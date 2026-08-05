@@ -17,6 +17,7 @@ class Validator:
         self.check_target_exists()
         self.check_missing_target()
         self.check_columns()
+        self.check_duplicate_columns()
 
         print("Validation passed!")
 
@@ -31,7 +32,7 @@ class Validator:
     def check_target_exists(self):
 
         if self.target not in self.df.columns:
-            raise ValueError(f"Target column {self.target} does not exist.")
+            raise ValueError(f"Target column '{self.target}' does not exist in the given dataset.")
 
 
 
@@ -50,4 +51,14 @@ class Validator:
         if len(self.df.columns) < 2:
             raise ValueError("Dataset needs at least one feature and one target column.")
 
+
+    def check_duplicate_columns(self):
+
+        # get the duplicates
+        duplicates = self.df.columns[
+            self.df.columns.duplicated()
+        ]
+
+        if len(duplicates) > 0:
+            raise ValueError(f"Duplicate columns found: {list(duplicates)}")
 
