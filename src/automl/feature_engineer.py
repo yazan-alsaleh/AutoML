@@ -17,8 +17,33 @@ class FeatureEngineer:
 
 
     def fit(self, X): # looks at the data and learns information from it.
-        pass
 
+        for column in X.columns: # for each column in the input data (features)
+
+            if X[column].nunique() <= 1: # count and if less than 1 or one means its unique
+                self.constant_columns.append(column) # save the column name
+
+
+        duplicates = X.T.duplicated() # take the transpose of the X inputs / features because duplicated() checks rows by default, but you want to find duplicate columns.
+
+        self.duplicate_columns = []
+
+        for column, is_duplicate in zip(X.columns, duplicates):
+            if is_duplicate:
+                self.duplicate_columns.append(column)
+
+        # X.columns will contain --> ["age", "age_copy", "salary"]
+        # duplicates: will contain --> [False, True, False]
+
+        # when using in zip() --> ("age", False)("age_copy", True)("salary", False), on the left the column name and on the right if the column duplicated or not. 
+
+        # now when the loop starts, column will be: column = "age" and is_duplicate = False --> Do nothing because its not duplicated.
+        # second loop column will be: column = "age_copy" and is_duplicate = True --> keep it because its duplicated.
+
+
+        return self # return the feature engineering object
+
+    
 
     def transform(self, X): # uses the information learned by fit() to modify the data.
         pass
