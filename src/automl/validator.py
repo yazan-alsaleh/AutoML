@@ -28,7 +28,6 @@ class Validator:
             raise ValueError("Dataset is empty.")
 
 
-
     def check_target_exists(self):
 
         if self.target not in self.df.columns:

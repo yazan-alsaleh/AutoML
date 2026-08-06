@@ -16,27 +16,34 @@ class DataLoader:
     # The main method of the class
 
     def load(self):
+
+
         df = pd.read_csv(self.path) # read the CSV
-
-        # Get the inputs (x)
-        
-        X = df.drop(columns = [self.target]) # Get all the columns except the trager. Becauses pandas receive a list we add [ ]
-
-        y = df[self.target] # Get the target / to be predicted column from the data frame
 
 
         # Instead of asking the user: is this problem classification or regression 
-
         # Detect what the task should be 
-        task = self.detect_task(y)
+        task = self.detect_task(df[self.target])
 
-        return X, y, task
+        return df, task
+
+
+    def split_data(self, df):
+
+        # Get the inputs (x)
+                
+        X = df.drop(columns = [self.target]) # Get all the columns except the trager. Becauses pandas receive a list we add [ ]
+        y = df[self.target] # Get the target / to be predicted column from the data frame
+        
+
+        return X, y
 
     # Get the problem type
     def detect_task(self, y):
 
         if y.dtype == "object": # like the rows in the column is: dog, dog, cat, dog. These are objects / labels
             return "classification"
+        
         if y.nunique() < 20: 
             return "classification"
         # nunique() counts how many different values exist in the target column.
