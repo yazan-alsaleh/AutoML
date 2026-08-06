@@ -17,7 +17,7 @@ class Evaluator:
 
     def evaluate(self, models, X_train, X_test, y_train, y_test):
 
-        for name, model in model.items(): # model comes from model zoo
+        for name, model in models.items(): # model comes from model zoo
                                 # item will give both model name and model object
 
             print(f"Training {name}...")
@@ -36,9 +36,9 @@ class Evaluator:
 
                 score = accuracy_score(y_test, predictions)
 
-            else:
+            else: # regression
 
-                score = accuracy_score(y_test, predictions)
+                score = r2_score(y_test, predictions)
 
 
             # Save the score of each model to show them later in the final report 

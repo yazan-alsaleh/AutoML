@@ -37,7 +37,8 @@ class AutoML:
 
         # 1. Load The Data
 
-        df, task = DataLoader.load()
+        df, task = self.data_loader.load()
+        print("Detected task:", task)
 
         # 2. Validate The Data
 
