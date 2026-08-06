@@ -12,6 +12,9 @@ class Evaluator:
         self.results = {}
 
         self.best_model = None
+
+        self.best_model_object = None # this will have the actual model object so the user can use it 
+
         self.best_score = None
 
 
@@ -52,7 +55,7 @@ class Evaluator:
 
 
 
-    def _find_best_model(self):
+    def _find_best_model(self, models):
 
         self.best_model = max(self.results, key = self.results.get)
         # max by default compares keys (the models names), we want to compare values, so use (key) argument, to compare the values not the keys of the dictionary.
@@ -60,4 +63,8 @@ class Evaluator:
 
         self.best_score = self.results[self.best_model]
         # Go inside the dictionary and find the key of the best model and store its score.
+
+
+        self.best_model_object = models[self.best_model]
+
 

@@ -83,6 +83,7 @@ class AutoML:
         # 9. Return The Results 
 
         return {
+            "best_model_name": self.evaluator.best_model,
             "best_model": self.evaluator.best_model,
             "best_score": self.evaluator.best_score,
             "all_results": results
