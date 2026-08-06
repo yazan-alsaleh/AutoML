@@ -44,12 +44,64 @@ class FeatureEngineer:
         return self # return the feature engineering object
 
     
-
+    # Apply feature engineering transformations.
     def transform(self, X): # uses the information learned by fit() to modify the data.
-        pass
+
+        # The goal is to clean and engineer features using the information learned during fit()
+
+
+        X = X.copy() # take a copy
+
+
+        # Remember in fit() you found all constant columns. Columns that there values never change, now remove them
+        X = X.drop(columns = self.constant_columns, errors = "ignore")
+
+
+        # Then remove duplicate columns
+        X = X.drop(columns = self.duplicate_columns, errors = "ignore")
+
+
+        # Then call the private date method 
+        X = self._extract_datetime_features(X)
+
+
+        return X # return the transformed dataframe
+        
 
 
     def fit_transform(self, X): # learn + apply. See notebook_1.ipynm in /notebooks
-        pass
+
+        self.fit(X)
+
+        return self.transform(X)
+
+
+    # Instead of keeping one datetime column, it can create several useful features / columns.
+    # The underscore (_) at the beginning of the method means its a internal helper method.
+    def _extract_datetime_features(self, X):
+
+
+        X = X.copy()
+
+        for col in X.columns: # for each column in the dataset
+
+            if pd.api.types.is_datetime64_any_dtype(X[col]): # This checks: Is this column a datetime column?
+
+                X[f"{col}_year"] = X[col].dt.year # .dt.year extracts just the year from every date, and then store it in a new column
+
+                X[f"{col}_month"] = X[col].dt.month
+
+                X[f"{col}_day"] = X[col].dt.day
+
+                X[f"{col}_weekday"] = X[col].dt.weekday # this will extrach the day of the week
+
+
+
+                # Once we've extracted all the useful information, we remove the original datetime column.
+                X = X.drop(columns = X[col])
+
+        return X
+
+
 
 
