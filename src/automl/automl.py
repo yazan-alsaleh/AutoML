@@ -7,6 +7,7 @@ from .feature_engineer import FeatureEngineer
 from .model_zoo import ModelZoo
 from .evaluator import Evaluator
 
+from .result import AutoMLResult
 
 from sklearn.model_selection import train_test_split
 
@@ -82,10 +83,9 @@ class AutoML:
 
         # 9. Return The Results 
 
-        return {
-            "best_model_name": self.evaluator.best_model,
-            "best_model": self.evaluator.best_model,
-            "best_score": self.evaluator.best_score,
-            "all_results": results
-        }
-
+        return AutoMLResult(
+            best_model_name=self.evaluator.best_model,
+            best_model=self.evaluator.best_model_object,
+            best_score=self.evaluator.best_score,
+            all_results=results
+        )

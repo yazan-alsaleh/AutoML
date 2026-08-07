@@ -48,7 +48,7 @@ class Evaluator:
             self.results[name] = score
 
 
-        self._find_best_model()
+        self._find_best_model(models)
 
         return self.results
 
