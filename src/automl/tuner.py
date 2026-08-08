@@ -12,7 +12,9 @@
 
 import optuna
 
+# cross_val_score is used to evaluate each hyperparameter combination using cross-validation method 
 from sklearn.model_selection import cross_val_score
+from sklearn.linear_model import LinearRegression
 from sklearn.ensemble import RandomForestRegressor, GradientBoostingRegressor
 class Tuner:
 
@@ -23,6 +25,7 @@ class Tuner:
         self.best_params = None # best hyperparameter combination
         self.best_model = None # we will store here the final tuned model
 
+    # the objective method means Optuna give me a set of hyperparameters, and I'll tell you how good they are.
     def objective(self, trail, model_name, X, y):
 
         # trail represents one experiment Optuna might create 
@@ -63,10 +66,38 @@ class Tuner:
                                               min_samples_leaf=min_samples_leaf,
                                               random_state=42)
 
+        elif model_name == "Linear Regression":
+
+            model = LinearRegression()
+
+        else:
+
+            raise ValueError(f"Unknown model: {model_name}")
+
+        score = cross_val_score(model, X, y, cv=5, scoring="r2")
+
+        return score.mean()
 
 
 
+    def tune(self, model_name, X, y):
+        # model_name --> which model you want to tune
+        # X --> input
+        # y --> target
 
+        # example: Find the best hyperparameters for Random Forest using X and y
 
+        
+
+        study = optuna.create_study(direction="maximize")
+
+        def objective(trail):
+            return self.objective(trail, model_name, X, y)
+
+        study.optimize(objective, n_trials=20)
+
+        self.best_params = study.best_params
+
+        return self.best_params
 
 
