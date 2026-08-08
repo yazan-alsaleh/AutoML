@@ -30,7 +30,6 @@ class Tuner:
 
         # trail represents one experiment Optuna might create 
 
-
         if model_name == "Random Forest": 
 
             n_estimators = trail.suggest_int("n_estimators", 100, 500)
@@ -87,17 +86,43 @@ class Tuner:
 
         # example: Find the best hyperparameters for Random Forest using X and y
 
-        
 
-        study = optuna.create_study(direction="maximize")
+        # A study is an Optuna object that contains / manages the whole tuning process.
+        study = optuna.create_study(direction="maximize") # maximize means Find the trial with the highest score
 
         def objective(trail):
             return self.objective(trail, model_name, X, y)
-
+        
+        # Start the optimization It tells Optuna: Run my objective function 20 times and find the best result
         study.optimize(objective, n_trials=20)
 
         self.best_params = study.best_params
 
+        self.best_model = self.build_model(model_name, self.best_params)
+
         return self.best_params
+
+
+    def build_model(self, model_name, params):
+        # model_name is which model we want to create 
+        # params contains the hyperparameters from Optuna
+
+        if model_name == "Random Forest":
+
+            return RandomForestRegressor(**params, random_state=42)
+            # Because Optuna returnsa a dictionary that contains the values of each parameter for the model,
+            # we use ** to convert it to actual parameter / arguments and its value, like (n_estimators = 300)
+
+        elif model_name == "Gradient Boosting":
+
+            return GradientBoostingRegressor(**params, random_state=42)
+
+        elif model_name == "Linear Regression":
+
+            return LinearRegression()
+            # Because your current LinearRegression doesn't need the hyperparameters
+
+
+        
 
 
