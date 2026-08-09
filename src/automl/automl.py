@@ -5,6 +5,7 @@ from .validator import Validator
 from .preprocessor import Preprocessor
 from .feature_engineer import FeatureEngineer
 from .model_zoo import ModelZoo
+from .tuner import Tuner
 from .evaluator import Evaluator
 
 from .result import AutoMLResult
@@ -19,6 +20,8 @@ class AutoML:
         self.data_path = data_path
         self.target = target
 
+
+        self.tuner = None
 
 
         self.data_loader = DataLoader(path = data_path, target = target)
@@ -81,7 +84,16 @@ class AutoML:
         results = self.evaluator.evaluate(models=models, X_train=X_train, X_test=X_test, y_train=y_train, y_test=y_test)
 
 
-        # 9. Return The Results 
+        self.tuner = Tuner(task)
+
+        best_model = self.tuner.tune(model_name=self.evaluator.best_model, X=X_train, y=y_train)
+
+        # 9. Evaluate tuned model
+        tuned_predictions = best_model.predict(X_test)
+
+        tuned_score = self.evaluator.calculate_score(y_test, tuned_predictions)
+
+        # 10. Return The Results 
 
         return AutoMLResult(
             best_model_name=self.evaluator.best_model,
@@ -89,3 +101,6 @@ class AutoML:
             best_score=self.evaluator.best_score,
             all_results=results
         )
+
+
+
